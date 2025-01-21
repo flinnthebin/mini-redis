@@ -20,4 +20,15 @@ and inspecting the list of CPU directories under /sys/devices/system/cpu/
 
 sched - linux scheduling scheme
 
+CPU_ALLOC the mask argument dynamically. Achieve by probing for the size of the required mask using sched_getaffinity()
+with increasing mask sizes (until the call does not fail with the error EINVAL).
+
+CPU_ALLOC may allocate a slightly larger CPU set than requested, because CPU sets are implemented as bit masks allocated
+in units of sizeof(long).
+
+The caller should iterate over the bits in the returned set, counting those which are set and stop upon reaching the
+value returned by CPU_COUNT, rather than iterating over the number of bits requested to be allocated.
+
+Example Code
+
 
